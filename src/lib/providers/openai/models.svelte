@@ -79,7 +79,7 @@ const gpt41 = {
       ...chatModelBase,
       prompt: 2 / 1_000_000, // $2 / 1M tokens
       completion: 8 / 1_000_000, // $8 / 1M tokens
-      max: 1_047_576 context window // 1,047,576 context window
+      max: 1_047_576 // 1,047,576 context window
 }
 const gpt4o = {
       ...chatModelBase,

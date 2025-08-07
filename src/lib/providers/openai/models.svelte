@@ -81,6 +81,20 @@
 
   // Reference: https://openai.com/pricing#language-models
 
+  const gpt5 = {
+    ...chatModelBase,
+    prompt: 1.25 / 1_000_000,
+    cachedPrompt: 0.125 / 1_000_000,
+    completion: 10 / 1_000_000,
+    max: 128000
+  }
+  const gpt5mini = {
+    ...chatModelBase,
+    prompt: 0.25 / 1_000_000,
+    cachedPrompt: 0.025 / 1_000_000,
+    completion: 2 / 1_000_000,
+    max: 128000
+  }
   const gpt41 = {
     ...chatModelBase,
     prompt: 0.000002, // $2.00 per 1M input tokens
@@ -144,6 +158,8 @@
   }
 
   export const chatModels: Record<string, ModelDetail> = {
+    'gpt-5': { ...gpt5 },
+    'gpt-5-mini': { ...gpt5mini },
     'gpt-4.1': { ...gpt41 },
     'gpt-4.1-mini': { ...gpt41mini },
     'gpt-4.1-nano': { ...gpt41nano },

@@ -23,7 +23,7 @@
 {#if isOpen}
 <div class="modal is-active" on:modal-esc={doConfirm}>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div class="modal-background" on:click={doConfirm} />
+  <div class="modal-background" role="button" tabindex="0" on:click={doConfirm}></div>
   <div class="modal-content nomax">
     <article class="message {classes}">
       <div class="message-header">

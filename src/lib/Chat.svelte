@@ -412,7 +412,7 @@
         }}
         on:input={e => autoGrowInputOnEvent(e)}
         bind:this={input}
-      />
+      ></textarea>
     </p>
     <p class="control mic" class:is-hidden={!recognition}>
       <button class="button" class:is-disabled={chatRequest.updating} class:is-pulse={recording} on:click|preventDefault={recordToggle}

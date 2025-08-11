@@ -235,9 +235,9 @@
   <div class="message-body content">
  
     {#if editing}
-      <form class="message-edit" on:submit|preventDefault={update} on:keydown={keydown}>
-        <div id={'edit-' + message.uuid} class="message-editor" bind:innerText={message.content} contenteditable
-        on:input={update} on:blur={exit} />
+      <form class="message-edit">
+        <div id={'edit-' + message.uuid} class="message-editor" role="textbox" tabindex="0" bind:innerText={message.content} contenteditable
+        on:keydown={keydown} on:input={update} on:blur={exit}></div>
       </form>
         {#if imageUrl}
           <img src={imageUrl} alt="">
@@ -245,10 +245,10 @@
     {:else}
       <div 
         class="message-display" 
-         
+        role="button" tabindex="0"
         on:touchend={editOnDoubleTap}
-          on:dblclick|preventDefault={() => edit()}
-        >
+        on:dblclick|preventDefault={() => edit()}
+      >
         {#if message.summary && !message.summary.length}
         <p><b>Summarizing...</b></p>
         {/if}

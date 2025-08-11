@@ -69,8 +69,10 @@
   <div
     slot="backdrop"
     class="backdrop"
+    role="button"
+    tabindex="0"
     on:click={closeModal}
-  />
+  ></div>
 </Modals>
 
 <svelte:window

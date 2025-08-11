@@ -82,7 +82,7 @@
 
 <li>
   {#if editing}
-    <div id="chat-menu-item-{chat.id}" class="chat-name-editor" on:keydown={keydown} contenteditable bind:innerText={chat.name} on:blur={update} />
+    <div id="chat-menu-item-{chat.id}" class="chat-name-editor" role="textbox" tabindex="0" on:keydown={keydown} contenteditable bind:innerText={chat.name} on:blur={update}></div>
   {:else}
   <a 
     href={`#/chat/${chat.id}`}
@@ -90,10 +90,16 @@
     class:is-waiting={waitingForConfirm} class:is-disabled={!hasActiveModels()} class:is-active={activeChatId === chat.id}
     on:click={() => { $pinMainMenu = false }} >
     {#if waitingForConfirm}
-    <a class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold delete-button" href={'$'} on:click|preventDefault={() => delChat()}><Fa icon={faCircleCheck} /></a>
+    <span class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold delete-button">
+      <a href={'$'} on:click|preventDefault={() => delChat()}><Fa icon={faCircleCheck} /></a>
+    </span>
     {:else}
-    <a class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold edit-button" href={'$'} on:click|preventDefault={() => edit()}><Fa icon={faPencil} /></a>
-    <a class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold delete-button" href={'$'} on:click|preventDefault={() => delChat()}><Fa icon={faTrash} /></a>
+    <span class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold edit-button">
+      <a href={'$'} on:click|preventDefault={() => edit()}><Fa icon={faPencil} /></a>
+    </span>
+    <span class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold delete-button">
+      <a href={'$'} on:click|preventDefault={() => delChat()}><Fa icon={faTrash} /></a>
+    </span>
     {/if}
     <span class="chat-item-name"><Fa class="mr-2 chat-icon" size="xs" icon="{faMessage}"/>{chat.name || `Chat ${chat.id}`}</span>
   </a>

@@ -47,7 +47,7 @@
 {#if isOpen}
 <div class="modal is-active" on:modal-esc={doClose}>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div class="modal-background" on:click={doClose} />
+  <div class="modal-background" role="button" tabindex="0" on:click={doClose}></div>
   <div class="modal-content nomax">
     <form action="{'#'}" on:submit|preventDefault={() => { doSubmit(value) }}> 
     <article class="message {classes}">

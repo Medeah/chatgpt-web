@@ -23,7 +23,7 @@ ChatGPT-web is a simple one-page web interface to the OpenAI ChatGPT API. To use
 * **Pre-selected prompts**: ChatGPT-web comes with a list of [pre-selected prompts](https://github.com/f/awesome-chatgpt-prompts), so you can get started quickly.
 * **Export**: ChatGPT-web can export chats as a Markdown file, so you can share them with others.
 * **Code**: ChatGPT-web recognizes and highlights code blocks and allows you to copy them with one click.
-* **Desktop app**: ChatGPT-web can be bundled as a desktop app, so you can use it outside of the browser.
+* **Desktop app**: ChatGPT-web previously supported bundling as a desktop app. This project now targets web-only.
 * **Image generation**: ChatGPT-web can generate images using the DALL·E model by using the prompt "show me an image of ...".
 * **Streaming**: ChatGPT-web can stream the response from the API, so you can see the response as it's being generated.
 
@@ -90,18 +90,7 @@ For instances where immediate API responses are preferred, consider utilizing th
 
 ## Desktop app
 
-To use ChatGPT-web as a desktop application:
-
-* **Installation**: First, ensure [Rust is installed](https://www.rust-lang.org/tools/install) on your computer.
-  
-* **Development Version**:
-  * Run `npm run tauri dev` to start the desktop app in development mode.
-  
-* **Production Version**:
-  * Use `npm run tauri build` to compile the production version of the app.
-  
-* **Location of the Built Application**:
-  * The built application will be available in the `src-tauri/target` folder.
+Desktop bundling has been removed. The app now runs as a web application only. Use the development and build commands above.
 
 ## Contributors
 

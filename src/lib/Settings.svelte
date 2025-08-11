@@ -1,8 +1,9 @@
 <script context="module" lang="ts">
-    import { applyProfile } from './Profiles.svelte'
+    import { applyProfile, getDefaultModel } from './Profiles.svelte'
     import { get } from 'svelte/store'
     import { apiKeyStorage, getChatSettings, getGlobalSettings, setGlobalSettingValueByKey } from './Storage.svelte'
-    import { faArrowDown91, faArrowDownAZ, faCheck, faThumbTack } from '@fortawesome/free-solid-svg-icons/index'
+    import { faCheck, faThumbTack } from '@fortawesome/free-solid-svg-icons/index'
+    import { gptDefaults, defaults, getChatDefaults as getDefaults, globalDefaults, excludeFromProfile, chatSortOptions } from './settings-data'
 // Setting definitions
 
 import {
@@ -23,13 +24,7 @@ import { getChatModelOptions, getModelDetail, getTokens } from './Models.svelte'
 // We are adding default model names explicitly here to avoid
 // circular dependencies. Alternative would be a big refactor,
 // which we want to avoid for now.
-export const getDefaultModel = async (): Promise<Model> => {
-  if (!get(apiKeyStorage)) return 'stabilityai/StableBeluga2'
-
-  const models = await getChatModelOptions()
-
-  return models[0].text
-}
+// getDefaultModel moved to Profiles.svelte to avoid circular init
 
 export const getChatSettingList = (): ChatSetting[] => {
       return chatSettingsList
@@ -57,106 +52,17 @@ export const getGlobalSettingObjectByKey = (key: keyof GlobalSettings): GlobalSe
       return globalSettingLookup[key]
 }
 
-export const getRequestDefaults = ():Request => {
-  return gptDefaults
-}
+export const getRequestDefaults = ():Request => gptDefaults as any
 
-export const getChatDefaults = ():ChatSettings => {
-  return defaults
-}
+export const getChatDefaults = ():ChatSettings => getDefaults()
 
-export const getExcludeFromProfile = () => {
-  return excludeFromProfile
-}
+export const getExcludeFromProfile = () => excludeFromProfile
 
 const hideModelSetting = (chatId, setting) => {
   return getModelDetail(getChatSettings(chatId).model).hideSetting(chatId, setting)
 }
 
-const gptDefaults = {
-  model: '',
-  messages: [],
-  temperature: 1,
-  top_p: 1,
-  n: 1,
-  stream: true,
-  stop: null,
-  max_completion_tokens: 512,
-  presence_penalty: 0,
-  frequency_penalty: 0,
-  logit_bias: null,
-  user: undefined
-}
-
-// Core set of defaults
-const defaults:ChatSettings = {
-  ...gptDefaults,
-  profile: '',
-  characterName: 'ChatGPT',
-  profileName: '',
-  profileDescription: '',
-  continuousChat: 'fifo',
-  summaryThreshold: 3000,
-  summarySize: 1000,
-  summaryExtend: 0,
-  summaryTemperature: 0.1,
-  pinTop: 0,
-  pinBottom: 6,
-  summaryPrompt: '',
-  useSystemPrompt: false,
-  systemPrompt: '',
-  hideSystemPrompt: false,
-  sendSystemPromptLast: false,
-  autoStartSession: false,
-  trainingPrompts: [],
-  hiddenPromptPrefix: '',
-  hppContinuePrompt: '',
-  hppWithSummaryPrompt: false,
-  imageGenerationModel: '',
-  startSequence: '',
-  stopSequence: '',
-  aggressiveStop: true,
-  delimiter: '',
-  userMessageStart: '',
-  userMessageEnd: '',
-  assistantMessageStart: '',
-  assistantMessageEnd: '',
-  systemMessageStart: '',
-  systemMessageEnd: '',
-  leadPrompt: '',
-  repetitionPenalty: 1.1,
-  holdSocket: true,
-  // useResponseAlteration: false,
-  // responseAlterations: [],
-  isDirty: false
-}
-
-export const globalDefaults: GlobalSettings = {
-  profiles: {} as Record<string, ChatSettings>,
-  lastProfile: 'default',
-  defaultProfile: 'default',
-  hideSummarized: false,
-  chatSort: 'created',
-  openAICompletionEndpoint: '',
-  enablePetals: false,
-  pedalsEndpoint: '',
-  openAiEndpoint: 'https://api.openai.com'
-}
-
-const excludeFromProfile = {
-  messages: true,
-  user: true,
-  isDirty: true
-}
-
-export const chatSortOptions = {
-  name: { text: 'Name', icon: faArrowDownAZ, value: '', sortFn: (a, b) => { return a.name < b.name ? -1 : a.name > b.name ? 1 : 0 } },
-  created: { text: 'Created', icon: faArrowDown91, value: '', sortFn: (a, b) => { return ((b.created || 0) - (a.created || 0)) || (b.id - a.id) } },
-  lastUse: { text: 'Last Use', icon: faArrowDown91, value: '', sortFn: (a, b) => { return ((b.lastUse || 0) - (a.lastUse || 0)) || (b.id - a.id) } },
-  lastAccess: { text: 'Last View', icon: faArrowDown91, value: '', sortFn: (a, b) => { return ((b.lastAccess || 0) - (a.lastAccess || 0)) || (b.id - a.id) } }
-} as Record<string, ChatSortOption>
-
-Object.entries(chatSortOptions).forEach(([k, o]) => { o.value = k })
+// chatSortOptions, defaults, globalDefaults now sourced from settings-data
 
 const profileSetting: ChatSetting & SettingSelect = {
       key: 'profile',

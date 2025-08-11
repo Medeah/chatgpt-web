@@ -2,7 +2,8 @@
   import { persisted } from 'svelte-local-storage-store'
   import { get, writable } from 'svelte/store'
   import type { Chat, ChatSettings, GlobalSettings, Message, ChatSetting, GlobalSetting, Usage, Model, ChatSortOption } from './Types.svelte'
-  import { getChatSettingObjectByKey, getGlobalSettingObjectByKey, getChatDefaults, getExcludeFromProfile, chatSortOptions, globalDefaults } from './Settings.svelte'
+  import { getChatSettingObjectByKey, getGlobalSettingObjectByKey, getChatDefaults, getExcludeFromProfile } from './Settings.svelte'
+  import { chatSortOptions, globalDefaults } from './settings-data'
   import { v4 as uuidv4 } from 'uuid'
   import { getProfile, getProfiles, isStaticProfile, newNameForProfile, restartProfile } from './Profiles.svelte'
   import { errorNotice } from './Util.svelte'
@@ -26,7 +27,7 @@
   export let currentChatId = writable(0)
   export let lastChatId = persisted('lastChatId', 0)
 
-  const chatDefaults = getChatDefaults()
+  // Avoid calling getChatDefaults() during module initialization to prevent circular init issues
   
   export const getApiKey = (): string => {
     return get(apiKeyStorage)
@@ -437,8 +438,9 @@
   export const setChatSettingValueByKey = (chatId: number, key: keyof ChatSettings, value) => {
     const setting = getChatSettingObjectByKey(key)
     if (setting) return setChatSettingValue(chatId, setting, value)
-    if (!(key in chatDefaults)) throw new Error('Invalid chat setting: ' + key)
-    const d = chatDefaults[key]
+    const defaults = getChatDefaults() as any
+    if (!(key in defaults)) throw new Error('Invalid chat setting: ' + key)
+    const d = defaults[key]
     if (d === null || d === undefined) {
       throw new Error('Unable to determine setting type for "' +
       key + ' from default of "' + d + '"')
@@ -466,7 +468,8 @@
     const chat = chats.find((chat) => chat.id === chatId) as Chat
     let value = chat.settings && chat.settings[setting.key]
     value = (value === undefined) ? null : value
-    if (!setting.forceApi && value === chatDefaults[setting.key]) value = null
+    const defaults = getChatDefaults() as any
+    if (!setting.forceApi && value === defaults[setting.key]) value = null
     return value
   }
   

@@ -3,7 +3,8 @@
   import { addChat, setChatSettingValueByKey } from './Storage.svelte'
   import { replace } from 'svelte-spa-router'
   import { getProfile, restartProfile } from './Profiles.svelte'
-  import { getChatDefaults, hasChatSetting } from './Settings.svelte'
+  import { getChatDefaults } from './settings-data'
+  import { hasChatSetting } from './Settings.svelte'
   import { onMount } from 'svelte'
 
   // Create the new chat instance then redirect to it

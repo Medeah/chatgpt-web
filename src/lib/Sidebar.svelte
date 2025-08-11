@@ -8,7 +8,7 @@
   import logo from '../assets/logo.svg'
   import { clickOutside } from 'svelte-use-click-outside'
   import { startNewChatWithWarning } from './Util.svelte'
-  import { chatSortOptions } from './Settings.svelte'
+  import { chatSortOptions } from './settings-data'
   import { hasActiveModels } from './Models.svelte'
 
   $: sortedChats = $chatsStorage.sort(getChatSortOption().sortFn)

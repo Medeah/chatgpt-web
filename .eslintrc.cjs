@@ -7,7 +7,6 @@ module.exports = {
   },
   extends: ['standard-with-typescript'],
   plugins: [
-    'svelte3',
     '@typescript-eslint'
   ],
   // Disable these rules: import/first, import/no-duplicates, import/no-mutable-exports, import/no-unresolved, import/prefer-default-export
@@ -20,16 +19,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-multiple-empty-lines': ['error', { max: 2, maxBOF: 2, maxEOF: 0 }] // See: https://github.com/sveltejs/eslint-plugin-svelte3/issues/41
   },
-  overrides: [
-    {
-      files: [
-        '**/*.svelte'
-      ],
-      processor: 'svelte3/svelte3'
-    }
-  ],
-  settings: {
-    'svelte3/typescript': true
-  },
+  overrides: [],
+  settings: {},
   ignorePatterns: ['node_modules/*', 'dist/*', 'src-tauri/*', '.eslintrc.cjs', '*.json']
 }

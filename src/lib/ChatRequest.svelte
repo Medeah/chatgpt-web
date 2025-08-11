@@ -9,12 +9,12 @@
 
 <script context="module" lang="ts">
     import { ChatCompletionResponse } from './ChatCompletionResponse.svelte'
-    import { cleanContent, mergeProfileFields, prepareSummaryPrompt } from './Profiles.svelte'
+    import { cleanContent, mergeProfileFields, prepareSummaryPrompt, getDefaultModel } from './Profiles.svelte'
     import { countMessageTokens, countPromptTokens, getModelMaxTokens } from './Stats.svelte'
     import type { Chat, ChatCompletionOpts, ChatSettings, Message, Model, Request } from './Types.svelte'
     import { deleteMessage, getChatSettingValueNullDefault, insertMessages, addError, currentChatMessages, getMessages, updateMessages, deleteSummaryMessage, getChat } from './Storage.svelte'
     import { scrollToBottom, scrollToMessage } from './Util.svelte'
-    import { getDefaultModel, getRequestSettingList } from './Settings.svelte'
+    import { getRequestSettingList } from './Settings.svelte'
     import { v4 as uuidv4 } from 'uuid'
     import { get } from 'svelte/store'
     import { getLeadPrompt, getModelDetail } from './Models.svelte'

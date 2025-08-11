@@ -1,6 +1,7 @@
 <script lang="ts">
   import { applyProfile, getDefaultProfileKey, getProfile, getProfileSelect, newNameForProfile, setSystemPrompt } from './Profiles.svelte'
-  import { getChatDefaults, getChatSettingList, getChatSettingObjectByKey, getExcludeFromProfile, hasChatSetting } from './Settings.svelte'
+  import { getChatDefaults } from './settings-data'
+  import { getChatSettingList, getChatSettingObjectByKey, getExcludeFromProfile, hasChatSetting } from './Settings.svelte'
   import {
     saveChatStore,
     chatsStorage,

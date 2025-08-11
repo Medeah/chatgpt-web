@@ -1,12 +1,20 @@
 <script context="module" lang="ts">
-  import { getChatDefaults, getDefaultModel, getExcludeFromProfile } from './Settings.svelte'
+  import { getChatDefaults, excludeFromProfile } from './settings-data'
   import { get, writable } from 'svelte/store'
+  import { apiKeyStorage } from './Storage.svelte'
+  import { getChatModelOptions } from './Models.svelte'
   // Profile definitions
   import { addMessage, clearMessages, deleteMessage, getChat, getChatSettings, getCustomProfiles, getGlobalSettings, getMessages, newName, resetChatSettings, saveChatStore, setGlobalSettingValueByKey, setMessages, updateProfile } from './Storage.svelte'
   import type { Message, SelectOption, ChatSettings } from './Types.svelte'
   import { v4 as uuidv4 } from 'uuid'
 
 const defaultProfile = 'default'
+
+export const getDefaultModel = async () => {
+  if (!get(apiKeyStorage)) return 'stabilityai/StableBeluga2'
+  const models = await getChatModelOptions()
+  return models[0].text
+}
 
 const chatDefaults = getChatDefaults()
 export let profileCache = writable({} as Record<string, ChatSettings>) //
@@ -69,7 +77,7 @@ export const getProfile = async (key:string, forReset:boolean = false):Promise<C
       profile = profiles[key]
     }
     const clone = JSON.parse(JSON.stringify(profile)) // Always return a copy
-    Object.keys(getExcludeFromProfile()).forEach(k => {
+    Object.keys(excludeFromProfile).forEach(k => {
       delete clone[k]
     })
     return clone

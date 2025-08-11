@@ -1,9 +1,10 @@
 <script lang="ts">
   import Code from './Code.svelte'
+  import Markdown from './Markdown.svelte'
   import { afterUpdate, createEventDispatcher, onMount } from 'svelte'
   import { deleteMessage, deleteSummaryMessage, truncateFromMessage, submitExitingPromptsNow, continueMessage, updateMessages } from './Storage.svelte'
   import { getPrice } from './Stats.svelte'
-  import SvelteMarkdown from 'svelte-markdown'
+  // TODO: Reintroduce markdown renderer compatible with Svelte 5
   import type { Message, Model, Chat } from './Types.svelte'
   import Fa from 'svelte-fa/src/fa.svelte'
   import { faTrash, faDiagramPredecessor, faDiagramNext, faCircleCheck, faPaperPlane, faEye, faEyeSlash, faEllipsis, faDownload, faClipboard } from '@fortawesome/free-solid-svg-icons/index'
@@ -252,11 +253,7 @@
         <p><b>Summarizing...</b></p>
         {/if}
         {#key refreshCounter}
-        <SvelteMarkdown 
-          source={displayMessage} 
-          options={markdownOptions} 
-          renderers={{ code: Code, html: Code }}
-        />
+         <Markdown source={displayMessage} />
         {/key}
         {#if imageUrl}
           <img src={imageUrl} alt="">

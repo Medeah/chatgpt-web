@@ -8,10 +8,22 @@
   import Chat from './lib/Chat.svelte'
   import NewChat from './lib/NewChat.svelte'
   import { chatsStorage, setGlobalSettingValueByKey } from './lib/Storage.svelte'
-  import { Modals, closeModal } from 'svelte-modals'
+  import { Modals, closeModal, setModalHandlers } from 'svelte-modals'
   import { dispatchModalEsc, checkModalEsc } from './lib/Util.svelte'
   import { set as setOpenAI } from './lib/providers/openai/util.svelte'
   import { hasActiveModels } from './lib/Models.svelte'
+  // Setup modal shim handlers
+  let modalHost: HTMLElement
+  let current: any = null
+  function mount(component, props) {
+    if (current) unmount()
+    current = new component({ target: modalHost, props: { isOpen: true, ...props } })
+  }
+  function unmount() {
+    if (current && current.$destroy) current.$destroy()
+    current = null
+  }
+  setModalHandlers(mount, unmount)
 
   // Check if the API key is passed in as a "key" query parameter - if so, save it
   // Example: https://niek.github.io/chatgpt-web/#/?key=sk-...
@@ -78,6 +90,8 @@
 <svelte:window
   on:keydown={(e) => checkModalEsc(e)}
 />
+
+<div bind:this={modalHost}></div>
 
 <style>
   .backdrop {

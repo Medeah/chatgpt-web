@@ -78,30 +78,96 @@
     }, 0)
   }
 
+  const goToChat = () => {
+    $pinMainMenu = false
+    replace(`#/chat/${chat.id}`)
+  }
+
+  const onItemKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      goToChat()
+    }
+  }
+
 </script>
 
 <li>
   {#if editing}
     <div id="chat-menu-item-{chat.id}" class="chat-name-editor" role="textbox" tabindex="0" on:keydown={keydown} contenteditable bind:innerText={chat.name} on:blur={update}></div>
-  {:else}
-  <a 
-    href={`#/chat/${chat.id}`}
-    class="chat-menu-item"
-    class:is-waiting={waitingForConfirm} class:is-disabled={!hasActiveModels()} class:is-active={activeChatId === chat.id}
-    on:click={() => { $pinMainMenu = false }} >
-    {#if waitingForConfirm}
-    <span class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold delete-button">
-      <a href={'$'} on:click|preventDefault={() => delChat()}><Fa icon={faCircleCheck} /></a>
-    </span>
-    {:else}
-    <span class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold edit-button">
-      <a href={'$'} on:click|preventDefault={() => edit()}><Fa icon={faPencil} /></a>
-    </span>
-    <span class="is-pulled-right is-hidden px-1 py-0 has-text-weight-bold delete-button">
-      <a href={'$'} on:click|preventDefault={() => delChat()}><Fa icon={faTrash} /></a>
-    </span>
-    {/if}
-    <span class="chat-item-name"><Fa class="mr-2 chat-icon" size="xs" icon="{faMessage}"/>{chat.name || `Chat ${chat.id}`}</span>
-  </a>
+{:else}
+  <div class="chat-menu-row" class:is-active={activeChatId === chat.id}>
+    <a 
+      href={`#/chat/${chat.id}`}
+      class="chat-menu-item"
+      class:is-waiting={waitingForConfirm} class:is-disabled={!hasActiveModels()} class:is-active={activeChatId === chat.id}
+      on:click={() => { $pinMainMenu = false }}
+      on:keydown={onItemKeydown}
+    >
+      <span class="chat-item-name"><Fa class="mr-2 chat-icon" size="xs" icon="{faMessage}"/>{chat.name || `Chat ${chat.id}`}</span>
+      <span class="chat-menu-actions">
+        {#if waitingForConfirm}
+          <button class="px-1 py-0 has-text-weight-bold delete-button icon-button" type="button" on:click|preventDefault|stopPropagation={() => delChat()} aria-label="Confirm delete"><Fa icon={faCircleCheck} /></button>
+        {:else}
+          <button class="px-1 py-0 has-text-weight-bold edit-button icon-button" type="button" on:click|preventDefault|stopPropagation={() => edit()} aria-label="Edit chat"><Fa icon={faPencil} /></button>
+          <button class="px-1 py-0 has-text-weight-bold delete-button icon-button" type="button" on:click|preventDefault|stopPropagation={() => delChat()} aria-label="Delete chat"><Fa icon={faTrash} /></button>
+        {/if}
+      </span>
+    </a>
+  </div>
   {/if}
 </li>
+
+<style>
+.chat-menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 1 auto;
+  padding-right: 0.25rem;
+  color: inherit;
+  min-height: 2.25rem;
+}
+.chat-item-name {
+  display: inline-flex;
+  align-items: center;
+}
+.chat-menu-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.icon-button {
+  background: transparent;
+  border: 0;
+  padding: 0.1rem 0.25rem;
+  line-height: 1;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: inherit;
+}
+.icon-button:focus {
+  outline: 1px dotted currentColor;
+}
+.icon-button :global(svg) {
+  vertical-align: middle;
+}
+
+/* Ensure hover/active styles apply to actions too */
+.chat-menu-item.is-active,
+.chat-menu-item:hover {
+  background-color: rgba(32, 156, 238, 0.1);
+}
+.chat-menu-item.is-active .chat-menu-actions :global(svg),
+.chat-menu-item:hover .chat-menu-actions :global(svg) {
+  color: #209cee; /* Bulma info color */
+}
+</style>

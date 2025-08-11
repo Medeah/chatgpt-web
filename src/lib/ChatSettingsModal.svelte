@@ -271,7 +271,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="modal chat-settings" class:is-active={showSettingsModal} on:modal-esc={closeSettings}>
   <div class="modal-background" role="button" tabindex="0" on:click={closeSettings}></div>
-  <div class="modal-card wide" role="dialog" aria-modal="true" on:click={() => { showProfileMenu = false }}>
+  <div class="modal-card wide" role="dialog" aria-modal="true" tabindex="0" on:click={() => { showProfileMenu = false }}>
     <header class="modal-card-head">
       <p class="modal-card-title">Chat Settings</p>
       <button class="delete" aria-label="close" on:click={closeSettings}></button>

@@ -9,7 +9,6 @@
   import type { Chat, Message, Model, ModelDetail } from '../../Types.svelte'
   import { chatRequest, imageRequest } from './request.svelte'
   import { checkModel, getSupportedModels } from './util.svelte'
-  import { encode } from 'gpt-tokenizer'
   import { get } from 'svelte/store'
 
   const hiddenSettings = {
@@ -47,7 +46,12 @@
     },
     request: chatRequest,
     check: checkModel,
-    getTokens: (value) => encode(value),
+    // Estimate tokens without external tokenizer. Approx. 4 chars per token.
+    getTokens: (value) => {
+      const est = Math.max(0, Math.ceil((value || '').length / 4))
+      // Return an array of the estimated length to satisfy existing API
+      return Array.from({ length: est }, () => 0)
+    },
     getEndpoint: (model) =>
       get(globalStorage).openAICompletionEndpoint ||
       getApiBase() + getEndpointCompletions(),

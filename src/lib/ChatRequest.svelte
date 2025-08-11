@@ -230,13 +230,13 @@ export class ChatRequest {
             if (value !== null) acc[key] = value
             return acc
           }, {}),
-          stream: opts.streaming
+          stream: opts.streaming,
+          ...(opts.streaming ? { stream_options: { include_usage: true } } : {})
         }
 
         // Make the chat completion request
         try {
-          // Add out token count to the response handler
-          // (some endpoints do not return counts, so we need to do it client side)
+          // Keep for max token logic but do not use for pricing; pricing uses API usage
           chatResponse.setPromptTokenCount(promptTokenCount)
           // run request for given model
           await modelDetail.request(request, _this, chatResponse, opts)

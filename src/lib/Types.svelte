@@ -51,6 +51,7 @@ export type Request = {
     top_p?: number;
     n?: number;
     stream?: boolean;
+    stream_options?: { include_usage?: boolean };
     stop?: string | null;
     max_completion_tokens?: number;
     presence_penalty?: number;
